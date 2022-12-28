@@ -1,4 +1,5 @@
 using HealthClinicApi.Data;
+using HealthClinicApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped<IPatientService, PatientService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
