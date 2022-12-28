@@ -7,5 +7,6 @@ namespace HealthClinicApi.Services
     {
         Task<ServiceResponse<List<GetPatientDto>>> GetAllPatients();
         Task<ServiceResponse<GetPatientDto>> GetPatientById(int id);
+        Task<ServiceResponse<GetPatientDto>> AddPatient(AddPatientDto newPatient);
     }
 }

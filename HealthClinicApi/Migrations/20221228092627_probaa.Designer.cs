@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthClinicApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221228083735_addedColumn")]
-    partial class addedColumn
+    [Migration("20221228092627_probaa")]
+    partial class probaa
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -15,16 +15,29 @@ namespace HealthClinicApi.Controllers
         {
             _patientService = patientService;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var response = await _patientService.GetAllPatients();
             return Ok(response);
         }
+
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetSingle(int id)
         {
             var response = await _patientService.GetPatientById(id);
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(AddPatientDto newPatient)
+        {
+            var response = await _patientService.AddPatient(newPatient);
+            if(response.Data == null)
+            {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
     }

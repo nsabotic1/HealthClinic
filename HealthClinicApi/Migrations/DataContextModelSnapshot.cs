@@ -120,7 +120,7 @@ namespace HealthClinicApi.Migrations
                     b.Property<DateTime>("Birthdate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DoctorId")
+                    b.Property<int?>("DoctorId")
                         .HasColumnType("int");
 
                     b.Property<int>("Gender")
@@ -172,13 +172,9 @@ namespace HealthClinicApi.Migrations
 
             modelBuilder.Entity("HealthClinicApi.Models.Patient", b =>
                 {
-                    b.HasOne("HealthClinicApi.Models.Doctor", "Doctor")
+                    b.HasOne("HealthClinicApi.Models.Doctor", null)
                         .WithMany("Patients")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
+                        .HasForeignKey("DoctorId");
                 });
 
             modelBuilder.Entity("HealthClinicApi.Models.Doctor", b =>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthClinicApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221227151203_Initial")]
-    partial class Initial
+    [Migration("20221228094803_promjena")]
+    partial class promjena
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,7 +120,10 @@ namespace HealthClinicApi.Migrations
                     b.Property<string>("Adress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DoctorId")
+                    b.Property<DateTime>("Birthdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DoctorId")
                         .HasColumnType("int");
 
                     b.Property<int>("Gender")
@@ -172,13 +175,9 @@ namespace HealthClinicApi.Migrations
 
             modelBuilder.Entity("HealthClinicApi.Models.Patient", b =>
                 {
-                    b.HasOne("HealthClinicApi.Models.Doctor", "Doctor")
+                    b.HasOne("HealthClinicApi.Models.Doctor", null)
                         .WithMany("Patients")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
+                        .HasForeignKey("DoctorId");
                 });
 
             modelBuilder.Entity("HealthClinicApi.Models.Doctor", b =>

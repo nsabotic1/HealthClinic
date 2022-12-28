@@ -16,6 +16,25 @@ namespace HealthClinicApi.Services
             _context = context;
             _mapper = mapper;
         }
+
+        public async Task<ServiceResponse<GetPatientDto>> AddPatient(AddPatientDto newPatient)
+        {
+            var serviceResponse = new ServiceResponse<GetPatientDto>();
+            try
+            {
+                var patient = _mapper.Map<Patient>(newPatient);
+                _context.Patients.Add(patient);
+                await _context.SaveChangesAsync();
+                serviceResponse.Data = _mapper.Map<GetPatientDto>(patient);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+
         public async Task<ServiceResponse<List<GetPatientDto>>> GetAllPatients()
         {
             var serviceResponse = new ServiceResponse<List<GetPatientDto>>();
