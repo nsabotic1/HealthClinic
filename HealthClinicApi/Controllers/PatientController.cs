@@ -24,7 +24,7 @@ namespace HealthClinicApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var response = await _patientService.GetAllPatients();
+            var response = await _patientService.GetPatientById(id);
             return Ok(response);
         }
     }
