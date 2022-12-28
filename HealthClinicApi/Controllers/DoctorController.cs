@@ -27,6 +27,10 @@ namespace HealthClinicApi.Controllers
         public async Task<IActionResult> GetSingle(int id)
         {
             var response = await _doctorService.GetDoctorById(id);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
             return Ok(response);
         }
 
@@ -37,6 +41,28 @@ namespace HealthClinicApi.Controllers
             if (response.Data == null)
             {
                 return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromQuery] int id, UpdateDoctorDto newDoctor)
+        {
+            var response = await _doctorService.UpdateDoctor(id, newDoctor);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var response = await _doctorService.DeleteDoctor(id);
+            if (response.Data == null)
+            {
+                return NotFound(response);
             }
             return Ok(response);
         }

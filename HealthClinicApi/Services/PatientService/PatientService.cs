@@ -23,6 +23,12 @@ namespace HealthClinicApi.Services
             try
             {
                 var patient = _mapper.Map<Patient>(newPatient);
+                if(patient.Gender == 0)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "You must choose a gender!";
+                    return serviceResponse;
+                }
                 _context.Patients.Add(patient);
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetPatientDto>(patient);
@@ -59,6 +65,12 @@ namespace HealthClinicApi.Services
             try
             {
                 var patient = await _context.Patients.Where(p => p.Id == id).SingleOrDefaultAsync();
+                if (patient == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Patient with that id doesn't exist!";
+                    return serviceResponse;
+                }
                 serviceResponse.Data = _mapper.Map<GetPatientDto>(patient);
             }
             catch (Exception ex)
@@ -75,6 +87,12 @@ namespace HealthClinicApi.Services
             try
             {
                 var patient = await _context.Patients.Where(p => p.Id == id).SingleOrDefaultAsync();
+                if (patient == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Patient with that id doesn't exist!";
+                    return serviceResponse;
+                }
                 _mapper.Map(newPatient, patient);
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetPatientDto>(patient);
@@ -93,6 +111,12 @@ namespace HealthClinicApi.Services
             try
             {
                 var patient = await _context.Patients.Where(p => p.Id == id).SingleOrDefaultAsync();
+                if (patient == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Patient with that id doesn't exist!";
+                    return serviceResponse;
+                }
                 _context.Patients.Remove(patient);
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _context.Patients.Select(p=>_mapper.Map<GetPatientDto>(p)).ToList();
