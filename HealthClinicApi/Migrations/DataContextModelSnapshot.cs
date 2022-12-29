@@ -76,6 +76,40 @@ namespace HealthClinicApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Doctors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = 1221,
+                            Lastname = "Arslanagić",
+                            Name = "Teufik",
+                            Title = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = 3313,
+                            Lastname = "Dizdarević",
+                            Name = "Amira",
+                            Title = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = 4924,
+                            Lastname = "Srećkić",
+                            Name = "Srećko",
+                            Title = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = 8976,
+                            Lastname = "Puhalo",
+                            Name = "Simonida",
+                            Title = 3
+                        });
                 });
 
             modelBuilder.Entity("HealthClinicApi.Models.MedicalFindingRecord", b =>
@@ -142,6 +176,48 @@ namespace HealthClinicApi.Migrations
                     b.HasIndex("DoctorId");
 
                     b.ToTable("Patients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Adress = "Zahira Panjete 32",
+                            Birthdate = new DateTime(1980, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 1,
+                            Lastname = "Mosby",
+                            Name = "Ted",
+                            Number = 123
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Adress = "Neverland 812",
+                            Birthdate = new DateTime(1989, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 1,
+                            Lastname = "Stinson",
+                            Name = "Barney",
+                            Number = 321
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Adress = "New Jersey 22",
+                            Birthdate = new DateTime(1999, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 2,
+                            Lastname = "Vision",
+                            Name = "Wanda",
+                            Number = 541
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Adress = "Ferde Hauptman 32",
+                            Birthdate = new DateTime(1970, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 2,
+                            Lastname = "Green",
+                            Name = "Rachel",
+                            Number = 541
+                        });
                 });
 
             modelBuilder.Entity("HealthClinicApi.Models.AdmissionRecord", b =>

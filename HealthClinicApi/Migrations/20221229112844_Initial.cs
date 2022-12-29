@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace HealthClinicApi.Migrations
 {
     /// <inheritdoc />
-    public partial class probaa : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -39,7 +41,7 @@ namespace HealthClinicApi.Migrations
                     Gender = table.Column<int>(type: "int", nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Number = table.Column<int>(type: "int", nullable: true),
-                    DoctorId = table.Column<int>(type: "int", nullable: false)
+                    DoctorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -48,8 +50,7 @@ namespace HealthClinicApi.Migrations
                         name: "FK_Patients_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -98,6 +99,17 @@ namespace HealthClinicApi.Migrations
                         principalTable: "Patients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Doctors",
+                columns: new[] { "Id", "Code", "Lastname", "Name", "Title" },
+                values: new object[,]
+                {
+                    { 1, 1221, "Arslanagić", "Teufik", 1 },
+                    { 2, 3313, "Dizdarević", "Amira", 1 },
+                    { 3, 4924, "Srećkić", "Srećko", 2 },
+                    { 4, 8976, "Puhalo", "Simonida", 3 }
                 });
 
             migrationBuilder.CreateIndex(

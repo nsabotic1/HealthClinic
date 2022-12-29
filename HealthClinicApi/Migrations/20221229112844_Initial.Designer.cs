@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthClinicApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221228110305_misdi")]
-    partial class misdi
+    [Migration("20221229112844_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,40 @@ namespace HealthClinicApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Doctors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = 1221,
+                            Lastname = "Arslanagić",
+                            Name = "Teufik",
+                            Title = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = 3313,
+                            Lastname = "Dizdarević",
+                            Name = "Amira",
+                            Title = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = 4924,
+                            Lastname = "Srećkić",
+                            Name = "Srećko",
+                            Title = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = 8976,
+                            Lastname = "Puhalo",
+                            Name = "Simonida",
+                            Title = 3
+                        });
                 });
 
             modelBuilder.Entity("HealthClinicApi.Models.MedicalFindingRecord", b =>

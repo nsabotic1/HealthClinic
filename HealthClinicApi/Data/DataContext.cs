@@ -15,6 +15,7 @@ namespace HealthClinicApi.Data
         public DbSet<MedicalFindingRecord> MedicalFindingRecords { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            SeedData.OnModelCreating(modelBuilder);
             base.OnModelCreating(modelBuilder);
            
 
