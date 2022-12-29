@@ -1,5 +1,6 @@
 using HealthClinicApi.Data;
 using HealthClinicApi.Services;
+using HealthClinicApi.Services.AdmissionRecordService;
 using HealthClinicApi.Services.DoctorService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IAdmissionRecordService, AdmissionRecordService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
