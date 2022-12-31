@@ -54,6 +54,7 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                 string patientName = record.Patient.Name + " " + record.Patient.Lastname;
                 string doctorName = record.Doctor.Name + " " + record.Doctor.Lastname + " - " + record.Doctor.Code;
                 GetAdmissionRecordDto helperRecord = new GetAdmissionRecordDto();
+                helperRecord.Id = record.Id;
                 helperRecord.AdmittedAt = record.AdmittedAt;
                 helperRecord.PatientName = patientName;
                 helperRecord.DoctorName = doctorName;
@@ -98,6 +99,7 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                       helperRecord.PatientName = patientName;
                     }
 
+                    helperRecord.Id = record.Id;
                   helperRecord.AdmittedAt = record.AdmittedAt;
                   if (record.Urgent == true) helperRecord.Urgent = "Yes";
                   else helperRecord.Urgent = "No";
