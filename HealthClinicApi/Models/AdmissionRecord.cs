@@ -8,17 +8,7 @@
         public int? DoctorId { get; set; } //1 prijem ima 1 doktora
         public Patient Patient { get; set; }
         public Doctor Doctor { get; set; }
-        public Nullable<bool> Urgent
-        {
-            get;
-            set;
-        }
-        public string IsUrgent
-        {
-            get
-            {
-                return (bool)this.Urgent ? "Yes" : "NO";
-            }
-        }
+        public Nullable<bool> Urgent{ get; set; }
+    
     }
 }
