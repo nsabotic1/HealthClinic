@@ -17,9 +17,13 @@ namespace HealthClinicApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] DateTime? startDate,[FromQuery] DateTime? endDate)
         {
-            var response = await _admissionRecordService.GetAllAdmissionRecords();
+            var response = await _admissionRecordService.GetAllAdmissionRecords(startDate, endDate);
+            if (response.Data == null)
+            {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 

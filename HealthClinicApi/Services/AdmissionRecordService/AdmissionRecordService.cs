@@ -70,7 +70,7 @@ namespace HealthClinicApi.Services.AdmissionRecordService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetAdmissionRecordDto>>> GetAllAdmissionRecords()
+        public async Task<ServiceResponse<List<GetAdmissionRecordDto>>> GetAllAdmissionRecords(DateTime? date1, DateTime? date2)
         {
             var serviceResponse = new ServiceResponse<List<GetAdmissionRecordDto>>();
             try
@@ -99,11 +99,22 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                       helperRecord.PatientName = patientName;
                     }
 
-                    helperRecord.Id = record.Id;
+                  helperRecord.Id = record.Id;
                   helperRecord.AdmittedAt = record.AdmittedAt;
                   if (record.Urgent == true) helperRecord.Urgent = "Yes";
                   else helperRecord.Urgent = "No";
                   allRecords.Add(helperRecord);
+                }
+
+                if(date1!=null && date2 != null)
+                {
+                   allRecords = allRecords.Where(r => r.AdmittedAt.Date >= date1 && r.AdmittedAt.Date <= date2).ToList();
+                }
+                if((date1==null && date2!= null) || (date1!=null && date2 == null))
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "You must enter both dates!";
+                    return serviceResponse;
                 }
                 serviceResponse.Data = allRecords;
             }
