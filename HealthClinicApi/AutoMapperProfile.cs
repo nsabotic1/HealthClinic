@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HealthClinicApi.Dtos.AdmissionRecordDtos;
 using HealthClinicApi.Dtos.DoctorDtos;
+using HealthClinicApi.Dtos.MedicalFindingRecordDto;
 using HealthClinicApi.Dtos.PatientDtos;
 using HealthClinicApi.Models;
 
@@ -25,6 +26,11 @@ namespace HealthClinicApi
 
             CreateMap<AdmissionRecord, GetAdmissionRecordDto>();
             CreateMap<AddAdmissionRecordDto, AdmissionRecord>();
+
+            CreateMap<MedicalFindingRecord, GetMedicalFindingRecordDto>();
+            CreateMap<AddMedicalFindingRecordDto, MedicalFindingRecord>().ForMember(x => x.CreatedAt, t => t.Ignore()); ;
+            CreateMap<UpdateMedicalFindingRecordDto, MedicalFindingRecord>()
+           .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }
