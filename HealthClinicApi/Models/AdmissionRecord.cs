@@ -8,7 +8,7 @@
         public int? DoctorId { get; set; } //1 prijem ima 1 doktora
         public Patient Patient { get; set; }
         public Doctor Doctor { get; set; }
-        public Nullable<bool> Urgent{ get; set; }
+        public bool Urgent{ get; set; }
     
     }
 }

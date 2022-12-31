@@ -7,7 +7,7 @@ namespace HealthClinicApi.Dtos.AdmissionRecordDtos
         public DateTime AdmittedAt { get; set; }
         public string? PatientName { get; set; }
         public string? DoctorName { get; set; }
-        public Nullable<bool> Urgent { get; set; }
+        public string Urgent { get; set; }
     }
 }
 

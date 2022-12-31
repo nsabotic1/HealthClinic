@@ -57,7 +57,8 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                 helperRecord.AdmittedAt = record.AdmittedAt;
                 helperRecord.PatientName = patientName;
                 helperRecord.DoctorName = doctorName;
-                helperRecord.Urgent = record.Urgent;
+                if (record.Urgent == true) helperRecord.Urgent = "Yes";
+                else helperRecord.Urgent = "No";
                 serviceResponse.Data = helperRecord;
             }
             catch (Exception ex)
@@ -98,7 +99,8 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                     }
 
                   helperRecord.AdmittedAt = record.AdmittedAt;
-                  helperRecord.Urgent = record.Urgent;
+                  if (record.Urgent == true) helperRecord.Urgent = "Yes";
+                  else helperRecord.Urgent = "No";
                   allRecords.Add(helperRecord);
                 }
                 serviceResponse.Data = allRecords;
