@@ -4,6 +4,7 @@ using HealthClinicApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthClinicApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221231082253_phone12")]
+    partial class phone12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,7 +199,7 @@ namespace HealthClinicApi.Migrations
                             Gender = 1,
                             Lastname = "Stinson",
                             Name = "Barney",
-                            Number = "0603372400"
+                            Number = "+38761395783"
                         },
                         new
                         {
@@ -206,7 +209,7 @@ namespace HealthClinicApi.Migrations
                             Gender = 2,
                             Lastname = "Vision",
                             Name = "Wanda",
-                            Number = "062575685"
+                            Number = "+38761395783"
                         },
                         new
                         {
@@ -216,7 +219,7 @@ namespace HealthClinicApi.Migrations
                             Gender = 2,
                             Lastname = "Green",
                             Name = "Rachel",
-                            Number = "+4930901820"
+                            Number = "+38761395783"
                         });
                 });
 

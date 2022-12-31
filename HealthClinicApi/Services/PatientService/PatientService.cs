@@ -3,6 +3,7 @@ using HealthClinicApi.Data;
 using HealthClinicApi.Dtos.PatientDtos;
 using HealthClinicApi.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace HealthClinicApi.Services
 {
@@ -22,6 +23,16 @@ namespace HealthClinicApi.Services
             var serviceResponse = new ServiceResponse<GetPatientDto>();
             try
             {
+                Regex validatePhoneNumberRegex = new Regex("^\\+?[0-9][0-9]{7,14}$");
+
+                if (newPatient.Number != null) {
+                    if (!validatePhoneNumberRegex.IsMatch(newPatient.Number))
+                    {
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = "Invalid phone number!";
+                        return serviceResponse;
+                    }
+                }
                 var patient = _mapper.Map<Patient>(newPatient);
                 if(patient.Gender == 0)
                 {
@@ -92,6 +103,18 @@ namespace HealthClinicApi.Services
                     serviceResponse.Success = false;
                     serviceResponse.Message = "Patient with that id doesn't exist!";
                     return serviceResponse;
+                }
+
+                Regex validatePhoneNumberRegex = new Regex("^\\+?[0-9][0-9]{7,14}$");
+
+                if (newPatient.Number != null)
+                {
+                    if (!validatePhoneNumberRegex.IsMatch(newPatient.Number))
+                    {
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = "Invalid phone number!";
+                        return serviceResponse;
+                    }
                 }
                 _mapper.Map(newPatient, patient);
                 await _context.SaveChangesAsync();

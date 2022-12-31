@@ -47,7 +47,7 @@ namespace HealthClinicApi.Data
                 Birthdate = DateTime.ParseExact("15/06/1980", "dd/MM/yyyy", null),
                 Gender = Gender.Male,
                 Adress = "Zahira Panjete 32",
-                Number = 123
+                Number = "+38761395783"
             },
             new Patient
             {
@@ -57,7 +57,7 @@ namespace HealthClinicApi.Data
                 Birthdate = DateTime.ParseExact("12/12/1989", "dd/MM/yyyy", null),
                 Gender = Gender.Male,
                 Adress = "Neverland 812",
-                Number = 321
+                Number = "0603372400"
             },
              new Patient
              {
@@ -67,7 +67,7 @@ namespace HealthClinicApi.Data
                  Birthdate = DateTime.ParseExact("01/07/1999", "dd/MM/yyyy", null),
                  Gender = Gender.Female,
                  Adress = "New Jersey 22",
-                 Number = 541
+                 Number = "062575685"
              },
               new Patient
               {
@@ -77,7 +77,7 @@ namespace HealthClinicApi.Data
                   Birthdate = DateTime.ParseExact("21/05/1970", "dd/MM/yyyy", null),
                   Gender = Gender.Female,
                   Adress = "Ferde Hauptman 32",
-                  Number = 541
+                  Number = "+4930901820"
               });
         }
     }
