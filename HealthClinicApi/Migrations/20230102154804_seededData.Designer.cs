@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthClinicApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230102094126_ksk")]
-    partial class ksk
+    [Migration("20230102154804_seededData")]
+    partial class seededData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,48 @@ namespace HealthClinicApi.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("AdmissionRecords");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AdmittedAt = new DateTime(2023, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DoctorId = 1,
+                            PatientId = 1,
+                            Urgent = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AdmittedAt = new DateTime(2023, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DoctorId = 2,
+                            PatientId = 2,
+                            Urgent = false
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AdmittedAt = new DateTime(2023, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DoctorId = 5,
+                            PatientId = 3,
+                            Urgent = true
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AdmittedAt = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DoctorId = 1,
+                            PatientId = 4,
+                            Urgent = false
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AdmittedAt = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DoctorId = 2,
+                            PatientId = 5,
+                            Urgent = true
+                        });
                 });
 
             modelBuilder.Entity("HealthClinicApi.Models.Doctor", b =>
@@ -112,6 +154,14 @@ namespace HealthClinicApi.Migrations
                             Lastname = "Puhalo",
                             Name = "Simonida",
                             Title = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = 8888,
+                            Lastname = "Fazlinović",
+                            Name = "Izet",
+                            Title = 1
                         });
                 });
 
@@ -143,6 +193,40 @@ namespace HealthClinicApi.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("MedicalFindingRecords");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AdmissionRecordId = 1,
+                            CreatedAt = new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7862),
+                            Description = "The patient complains of kidney pain. Sand present in right kidney. Do a urine test",
+                            PatientId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AdmissionRecordId = 2,
+                            CreatedAt = new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7864),
+                            Description = "Asthma present for months. Need to change therapy.",
+                            PatientId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AdmissionRecordId = 3,
+                            CreatedAt = new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7866),
+                            Description = "The patient complains of back pain. it is necessary to take a spine scan",
+                            PatientId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AdmissionRecordId = 4,
+                            CreatedAt = new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7867),
+                            Description = "Sore throat for 10 days. Drink as much tea as possible and Tylol hot.",
+                            PatientId = 4
+                        });
                 });
 
             modelBuilder.Entity("HealthClinicApi.Models.Patient", b =>
@@ -159,9 +243,6 @@ namespace HealthClinicApi.Migrations
                     b.Property<DateTime>("Birthdate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DoctorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
@@ -177,8 +258,6 @@ namespace HealthClinicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
 
                     b.ToTable("Patients");
 
@@ -222,6 +301,16 @@ namespace HealthClinicApi.Migrations
                             Lastname = "Green",
                             Name = "Rachel",
                             Number = "+4930901820"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Adress = "Iza sedam mora i gora 92",
+                            Birthdate = new DateTime(2002, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 2,
+                            Lastname = "Buffay",
+                            Name = "Phoebe",
+                            Number = "+3812509182509"
                         });
                 });
 
@@ -259,13 +348,6 @@ namespace HealthClinicApi.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("HealthClinicApi.Models.Patient", b =>
-                {
-                    b.HasOne("HealthClinicApi.Models.Doctor", null)
-                        .WithMany("Patients")
-                        .HasForeignKey("DoctorId");
-                });
-
             modelBuilder.Entity("HealthClinicApi.Models.AdmissionRecord", b =>
                 {
                     b.Navigation("MedicalFindingRecords");
@@ -274,8 +356,6 @@ namespace HealthClinicApi.Migrations
             modelBuilder.Entity("HealthClinicApi.Models.Doctor", b =>
                 {
                     b.Navigation("AdmissionRecords");
-
-                    b.Navigation("Patients");
                 });
 
             modelBuilder.Entity("HealthClinicApi.Models.Patient", b =>

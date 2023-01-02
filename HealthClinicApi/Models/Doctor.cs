@@ -7,7 +7,6 @@
         public string Lastname { get; set; }
         public Title Title { get; set; }
         public int Code { get; set; }
-        public ICollection<Patient>? Patients { get; set; }
         public ICollection<AdmissionRecord>? AdmissionRecords { get; set; } //1 doktor ima vise prijema
     }
 }

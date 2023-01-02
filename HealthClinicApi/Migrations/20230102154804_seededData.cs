@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HealthClinicApi.Migrations
 {
     /// <inheritdoc />
-    public partial class ksk : Migration
+    public partial class seededData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,17 +40,11 @@ namespace HealthClinicApi.Migrations
                     Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DoctorId = table.Column<int>(type: "int", nullable: true)
+                    Number = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Patients", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Patients_Doctors_DoctorId",
-                        column: x => x.DoctorId,
-                        principalTable: "Doctors",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -115,18 +109,43 @@ namespace HealthClinicApi.Migrations
                     { 1, 1221, "Arslanagić", "Teufik", 1 },
                     { 2, 3313, "Dizdarević", "Amira", 1 },
                     { 3, 4924, "Srećkić", "Srećko", 2 },
-                    { 4, 8976, "Puhalo", "Simonida", 3 }
+                    { 4, 8976, "Puhalo", "Simonida", 3 },
+                    { 5, 8888, "Fazlinović", "Izet", 1 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Patients",
-                columns: new[] { "Id", "Adress", "Birthdate", "DoctorId", "Gender", "Lastname", "Name", "Number" },
+                columns: new[] { "Id", "Adress", "Birthdate", "Gender", "Lastname", "Name", "Number" },
                 values: new object[,]
                 {
-                    { 1, "Zahira Panjete 32", new DateTime(1980, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, "Mosby", "Ted", "+38761395783" },
-                    { 2, "Neverland 812", new DateTime(1989, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, "Stinson", "Barney", "0603372400" },
-                    { 3, "New Jersey 22", new DateTime(1999, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 2, "Vision", "Wanda", "062575685" },
-                    { 4, "Ferde Hauptman 32", new DateTime(1970, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 2, "Green", "Rachel", "+4930901820" }
+                    { 1, "Zahira Panjete 32", new DateTime(1980, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Mosby", "Ted", "+38761395783" },
+                    { 2, "Neverland 812", new DateTime(1989, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Stinson", "Barney", "0603372400" },
+                    { 3, "New Jersey 22", new DateTime(1999, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Vision", "Wanda", "062575685" },
+                    { 4, "Ferde Hauptman 32", new DateTime(1970, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Green", "Rachel", "+4930901820" },
+                    { 5, "Iza sedam mora i gora 92", new DateTime(2002, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Buffay", "Phoebe", "+3812509182509" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AdmissionRecords",
+                columns: new[] { "Id", "AdmittedAt", "DoctorId", "PatientId", "Urgent" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2023, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1, true },
+                    { 2, new DateTime(2023, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 2, false },
+                    { 3, new DateTime(2023, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 3, true },
+                    { 4, new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4, false },
+                    { 5, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 5, true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MedicalFindingRecords",
+                columns: new[] { "Id", "AdmissionRecordId", "CreatedAt", "Description", "PatientId" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7862), "The patient complains of kidney pain. Sand present in right kidney. Do a urine test", 1 },
+                    { 2, 2, new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7864), "Asthma present for months. Need to change therapy.", 2 },
+                    { 3, 3, new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7866), "The patient complains of back pain. it is necessary to take a spine scan", 3 },
+                    { 4, 4, new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7867), "Sore throat for 10 days. Drink as much tea as possible and Tylol hot.", 4 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -148,11 +167,6 @@ namespace HealthClinicApi.Migrations
                 name: "IX_MedicalFindingRecords_PatientId",
                 table: "MedicalFindingRecords",
                 column: "PatientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Patients_DoctorId",
-                table: "Patients",
-                column: "DoctorId");
         }
 
         /// <inheritdoc />
@@ -165,10 +179,10 @@ namespace HealthClinicApi.Migrations
                 name: "AdmissionRecords");
 
             migrationBuilder.DropTable(
-                name: "Patients");
+                name: "Doctors");
 
             migrationBuilder.DropTable(
-                name: "Doctors");
+                name: "Patients");
         }
     }
 }
