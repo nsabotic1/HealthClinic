@@ -173,8 +173,6 @@ namespace HealthClinicApi.Data
                     PatientId = 4,
                     AdmissionRecordId = 4
                 });
-        
-
-    }
+         }
     }
 }

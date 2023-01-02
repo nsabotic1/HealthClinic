@@ -17,10 +17,12 @@ namespace HealthClinicApi.Helpers
 
         public async Task<GetAdmissionRecordDto> ReturnAdmissionRecord(AdmissionRecord record)
         {
-            var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == record.DoctorId);
+            
             string patientName;
             string doctorName;
             GetAdmissionRecordDto helperRecord = new GetAdmissionRecordDto();
+
+            var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == record.DoctorId);
             if (doctor != null)
             {
                 doctorName = doctor.Name + " " + doctor.Lastname + " - " + record.Doctor.Code;
@@ -51,19 +53,23 @@ namespace HealthClinicApi.Helpers
             string doctorName;
             helperRecord = new GetMedicalFindingRecordDto();
             helperAdmissionRecord = new GetAdmissionRecordDto();
-            var patient = await _context.Patients.SingleOrDefaultAsync(d => d.Id == record.PatientId);
+            
             var admissionRecord = await _context.AdmissionRecords.SingleOrDefaultAsync(d => d.Id == record.AdmissionRecordId);
+
             var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == admissionRecord.DoctorId);
             if (doctor != null)
             {
                 doctorName = doctor.Name + " " + doctor.Lastname + " - " + doctor.Code;
                 helperAdmissionRecord.DoctorName = doctorName;
             }
+
+            var patient = await _context.Patients.SingleOrDefaultAsync(d => d.Id == record.PatientId);
             if (patient != null)
             {
                 patientName = patient.Name + " " + patient.Lastname;
                 helperAdmissionRecord.PatientName = patientName;
             }
+
             if (admissionRecord.Urgent == true) helperAdmissionRecord.Urgent = "Yes";
             else helperAdmissionRecord.Urgent = "No";
             helperAdmissionRecord.Id = admissionRecord.Id;
@@ -72,6 +78,7 @@ namespace HealthClinicApi.Helpers
             helperRecord.Description = record.Description;
             helperRecord.CreatedAt = record.CreatedAt;
             helperRecord.AdmissionRecord = helperAdmissionRecord;
+
             return helperRecord;
         }
     }

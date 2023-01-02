@@ -36,13 +36,13 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                 }
 
                 var admissionRecord = await _context.AdmissionRecords.SingleOrDefaultAsync(r => r.Id == newMedicalFindingRecord.AdmissionRecordId);
-                
                 if (admissionRecord == null)
                 {
                     serviceResponse.Success = false;
                     serviceResponse.Message = "The admission record with that id doesn't exist!";
                     return serviceResponse;
                 }
+
                 if (admissionRecord.PatientId != patient.Id)
                 {
                     serviceResponse.Success = false;
@@ -54,11 +54,13 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                 record.CreatedAt = DateTime.UtcNow;
                 record.Patient = patient;
                 record.AdmissionRecord = admissionRecord;
+
                 _context.MedicalFindingRecords.Add(record);
                 await _context.SaveChangesAsync();
+
                 var helperRecord = new GetMedicalFindingRecordDto();
                 helperRecord = await _helperMethods.ReturnMedicalRecord(record);
-                Console.WriteLine(record);
+
                 serviceResponse.Data = helperRecord;
             }
             catch (Exception ex)
@@ -82,6 +84,7 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                     serviceResponse.Message = "Medical record with that id doesn't exsist!";
                     return serviceResponse;
                 }
+
                 _context.MedicalFindingRecords.Remove(deletedRecord);
                 await _context.SaveChangesAsync();
 
@@ -96,6 +99,7 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                     allRecords.Add(helperRecord);
                 }
                 serviceResponse.Data = allRecords;
+                serviceResponse.Message = "Record deleted!";
             }
             catch (Exception ex)
             {
@@ -142,12 +146,14 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                     .ToListAsync();
                 List<GetMedicalFindingRecordDto> allRecords = new List<GetMedicalFindingRecordDto>();
                 GetMedicalFindingRecordDto helperRecord = new GetMedicalFindingRecordDto();
+
                 if(records.Count == 0)
                 {
                     serviceResponse.Success = false;
                     serviceResponse.Message = "Patient with that id doesn't exist or doesn't have any medical records!";
                     return serviceResponse;
                 }
+
                 foreach (var record in records)
                 {
                     helperRecord = new GetMedicalFindingRecordDto();
@@ -179,6 +185,7 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                     serviceResponse.Message = "Medical record with that id doesn't exsist!";
                     return serviceResponse;
                 }
+
                 if (string.IsNullOrWhiteSpace(newRecord.Description))
                 {
                     serviceResponse.Success = false;

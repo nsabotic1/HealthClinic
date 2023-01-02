@@ -31,6 +31,7 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                     serviceResponse.Message = "Admitted date can't be older than today!";
                     return serviceResponse;
                 }
+
                var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == newRecord.DoctorId);
                if(doctor!=null && doctor.Title != Title.Specialist)
                 {
@@ -38,6 +39,7 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                     serviceResponse.Message = "The doctor must be a specialist!";
                     return serviceResponse;
                 }
+
                var patient = await _context.Patients.SingleOrDefaultAsync(p => p.Id == newRecord.PatientId);
                if(patient == null)
                 {
@@ -45,12 +47,14 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                     serviceResponse.Message = "The patient with that id doesn't exist!";
                     return serviceResponse;
                 }
+
                if(doctor == null)
                 {
                     serviceResponse.Success = false;
                     serviceResponse.Message = "The doctor with that id doesn't exist!";
                     return serviceResponse;
                 }
+
                 var record = _mapper.Map<AdmissionRecord>(newRecord);
                 _context.AdmissionRecords.Add(record);
                 await _context.SaveChangesAsync();
@@ -80,6 +84,7 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                     serviceResponse.Message = "Admission record with that id doesn't exsist!";
                     return serviceResponse;
                 }
+
                 _context.AdmissionRecords.Remove(deletedRecord);
                 await _context.SaveChangesAsync();
 
@@ -93,8 +98,8 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                     helperRecord = new GetAdmissionRecordDto();
                     helperRecord = await _helperMethods.ReturnAdmissionRecord(record);
                     allRecords.Add(helperRecord);
-
                 }
+
                 serviceResponse.Data = allRecords;
                 serviceResponse.Message = "Record successfully deleted!";
             }
@@ -127,12 +132,14 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                 {
                    allRecords = allRecords.Where(r => r.AdmittedAt.Date >= date1 && r.AdmittedAt.Date <= date2).ToList();
                 }
+
                 if((date1==null && date2!= null) || (date1!=null && date2 == null))
                 {
                     serviceResponse.Success = false;
                     serviceResponse.Message = "You must enter both dates!";
                     return serviceResponse;
                 }
+
                 serviceResponse.Data = allRecords;
             }
             catch (Exception ex)

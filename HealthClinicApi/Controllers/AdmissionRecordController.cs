@@ -58,7 +58,6 @@ namespace HealthClinicApi.Controllers
                 return NotFound(response);
             }
             return Ok(response);
-        }
-        
+        } 
     }
 }

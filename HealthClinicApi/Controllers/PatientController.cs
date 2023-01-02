@@ -55,6 +55,7 @@ namespace HealthClinicApi.Controllers
             }
             return Ok(response);
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

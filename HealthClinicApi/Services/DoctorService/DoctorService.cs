@@ -23,12 +23,14 @@ namespace HealthClinicApi.Services.DoctorService
             try
             {
                 var doctor = _mapper.Map<Doctor>(newDoctor);
+
                 if(doctor.Title == 0 || doctor.Code == 0)
                 {
                     serviceResponse.Success = false;
                     serviceResponse.Message = "Title and code can't be 0!";
                     return serviceResponse;
                 }
+
                 _context.Doctors.Add(doctor);
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetDoctorDto>(doctor);
@@ -53,6 +55,7 @@ namespace HealthClinicApi.Services.DoctorService
                     serviceResponse.Message = "Doctor with that id doesn't exist!";
                     return serviceResponse;
                 }
+
                 _context.Doctors.Remove(doctor);
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _context.Doctors.Select(d => _mapper.Map<GetDoctorDto>(d)).ToList();
@@ -117,6 +120,7 @@ namespace HealthClinicApi.Services.DoctorService
                     serviceResponse.Message = "Doctor with that id doesn't exist!";
                     return serviceResponse;
                 }
+
                 _mapper.Map(newDoctor, doctor);
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetDoctorDto>(doctor);

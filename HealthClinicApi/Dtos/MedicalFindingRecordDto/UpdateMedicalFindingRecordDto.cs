@@ -3,6 +3,5 @@
     public class UpdateMedicalFindingRecordDto
     {
         public string Description { get; set; }
-  
     }
 }

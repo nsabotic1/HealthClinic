@@ -66,6 +66,5 @@ namespace HealthClinicApi.Controllers
             }
             return Ok(response);
         }
-
     }
 }

@@ -33,6 +33,7 @@ namespace HealthClinicApi.Services
                         return serviceResponse;
                     }
                 }
+
                 var patient = _mapper.Map<Patient>(newPatient);
                 if(patient.Gender == 0)
                 {
@@ -40,6 +41,7 @@ namespace HealthClinicApi.Services
                     serviceResponse.Message = "You must choose a gender!";
                     return serviceResponse;
                 }
+
                 _context.Patients.Add(patient);
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetPatientDto>(patient);
@@ -106,7 +108,6 @@ namespace HealthClinicApi.Services
                 }
 
                 Regex validatePhoneNumberRegex = new Regex("^\\+?[0-9][0-9]{7,14}$");
-
                 if (newPatient.Number != null)
                 {
                     if (!validatePhoneNumberRegex.IsMatch(newPatient.Number))
@@ -116,8 +117,10 @@ namespace HealthClinicApi.Services
                         return serviceResponse;
                     }
                 }
+
                 _mapper.Map(newPatient, patient);
                 await _context.SaveChangesAsync();
+
                 serviceResponse.Data = _mapper.Map<GetPatientDto>(patient);
                 serviceResponse.Message = "Your patient has been updated !";
             }
@@ -140,8 +143,10 @@ namespace HealthClinicApi.Services
                     serviceResponse.Message = "Patient with that id doesn't exist!";
                     return serviceResponse;
                 }
+
                 _context.Patients.Remove(patient);
                 await _context.SaveChangesAsync();
+
                 serviceResponse.Data = _context.Patients.Select(p=>_mapper.Map<GetPatientDto>(p)).ToList();
                 serviceResponse.Message = "Your patient has been deleted!";
             }
