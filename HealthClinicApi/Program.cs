@@ -1,4 +1,5 @@
 using HealthClinicApi.Data;
+using HealthClinicApi.Helpers;
 using HealthClinicApi.Services;
 using HealthClinicApi.Services.AdmissionRecordService;
 using HealthClinicApi.Services.DoctorService;
@@ -17,6 +18,7 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IAdmissionRecordService, AdmissionRecordService>();
 builder.Services.AddScoped<IMedicalFindingRecordService, MedicalFindingRecordService>();
+builder.Services.AddScoped<IHelperMethodsService, HelperMethodsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

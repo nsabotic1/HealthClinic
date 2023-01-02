@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HealthClinicApi.Data;
 using HealthClinicApi.Dtos.AdmissionRecordDtos;
+using HealthClinicApi.Helpers;
 using HealthClinicApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,11 @@ namespace HealthClinicApi.Services.AdmissionRecordService
     {
         private readonly IMapper _mapper;
         private readonly DataContext _context;
+        private readonly IHelperMethodsService _helperMethods;
 
-        public AdmissionRecordService(IMapper mapper, DataContext context)
+        public AdmissionRecordService(IMapper mapper, DataContext context, IHelperMethodsService helperMethods)
         {
+            _helperMethods = helperMethods;
             _mapper = mapper;
             _context = context;
         }
@@ -51,15 +54,10 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                 var record = _mapper.Map<AdmissionRecord>(newRecord);
                 _context.AdmissionRecords.Add(record);
                 await _context.SaveChangesAsync();
-                string patientName = record.Patient.Name + " " + record.Patient.Lastname;
-                string doctorName = record.Doctor.Name + " " + record.Doctor.Lastname + " - " + record.Doctor.Code;
+                
                 GetAdmissionRecordDto helperRecord = new GetAdmissionRecordDto();
-                helperRecord.Id = record.Id;
-                helperRecord.AdmittedAt = record.AdmittedAt;
-                helperRecord.PatientName = patientName;
-                helperRecord.DoctorName = doctorName;
-                if (record.Urgent == true) helperRecord.Urgent = "Yes";
-                else helperRecord.Urgent = "No";
+                helperRecord = await _helperMethods.ReturnAdmissionRecord(record);
+               
                 serviceResponse.Data = helperRecord;
             }
             catch (Exception ex)
@@ -86,34 +84,16 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                 await _context.SaveChangesAsync();
 
                 var records = await _context.AdmissionRecords.ToListAsync();
-                string patientName;
-                string doctorName;
+               
                 List<GetAdmissionRecordDto> allRecords = new List<GetAdmissionRecordDto>();
                 GetAdmissionRecordDto helperRecord = new GetAdmissionRecordDto();
 
                 foreach (var record in records)
                 {
                     helperRecord = new GetAdmissionRecordDto();
-                    var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == record.DoctorId);
-
-                    if (doctor != null)
-                    {
-                        doctorName = doctor.Name + " " + doctor.Lastname + " - " + record.Doctor.Code;
-                        helperRecord.DoctorName = doctorName;
-                    }
-
-                    var patient = await _context.Patients.SingleOrDefaultAsync(p => p.Id == record.PatientId);
-                    if (patient != null)
-                    {
-                        patientName = patient.Name + " " + patient.Lastname;
-                        helperRecord.PatientName = patientName;
-                    }
-
-                    helperRecord.Id = record.Id;
-                    helperRecord.AdmittedAt = record.AdmittedAt;
-                    if (record.Urgent == true) helperRecord.Urgent = "Yes";
-                    else helperRecord.Urgent = "No";
+                    helperRecord = await _helperMethods.ReturnAdmissionRecord(record);
                     allRecords.Add(helperRecord);
+
                 }
                 serviceResponse.Data = allRecords;
                 serviceResponse.Message = "Record successfully deleted!";
@@ -132,33 +112,14 @@ namespace HealthClinicApi.Services.AdmissionRecordService
             try
             {
                 var records = await _context.AdmissionRecords.ToListAsync();
-                string patientName;
-                string doctorName;
+               
                 List<GetAdmissionRecordDto> allRecords = new List<GetAdmissionRecordDto>();
                 GetAdmissionRecordDto helperRecord = new GetAdmissionRecordDto();
                 
                 foreach (var record in records)
                 {
                   helperRecord = new GetAdmissionRecordDto();
-                  var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == record.DoctorId);
-                  
-                  if(doctor != null)
-                    {
-                      doctorName = doctor.Name + " " + doctor.Lastname + " - " + record.Doctor.Code;
-                        helperRecord.DoctorName = doctorName;
-                    }
-                  
-                  var patient = await _context.Patients.SingleOrDefaultAsync(p => p.Id == record.PatientId);
-                  if(patient != null)
-                    {
-                      patientName = patient.Name + " " + patient.Lastname;
-                      helperRecord.PatientName = patientName;
-                    }
-
-                  helperRecord.Id = record.Id;
-                  helperRecord.AdmittedAt = record.AdmittedAt;
-                  if (record.Urgent == true) helperRecord.Urgent = "Yes";
-                  else helperRecord.Urgent = "No";
+                  helperRecord = await _helperMethods.ReturnAdmissionRecord(record);
                   allRecords.Add(helperRecord);
                 }
 

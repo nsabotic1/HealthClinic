@@ -3,6 +3,7 @@ using HealthClinicApi.Data;
 using HealthClinicApi.Dtos.AdmissionRecordDtos;
 using HealthClinicApi.Dtos.MedicalFindingRecordDto;
 using HealthClinicApi.Dtos.PatientDtos;
+using HealthClinicApi.Helpers;
 using HealthClinicApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +13,13 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
     {
         private readonly IMapper _mapper;
         private readonly DataContext _context;
+        private readonly IHelperMethodsService _helperMethods;
 
-        public MedicalFindingRecordService(IMapper mapper, DataContext context)
+        public MedicalFindingRecordService(IMapper mapper, DataContext context, IHelperMethodsService helperMethods)
         {
             _mapper = mapper;
             _context = context;
+            _helperMethods = helperMethods;
         }
         public async Task<ServiceResponse<GetMedicalFindingRecordDto>> AddMedicalFindingRecord(AddMedicalFindingRecordDto newMedicalFindingRecord)
         {
@@ -46,22 +49,7 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                     serviceResponse.Message = "That admission record doesn't belog to that patient!";
                     return serviceResponse;
                 }
-                string patientName;
-                string doctorName;
-                GetAdmissionRecordDto helperAdmissionRecord = new GetAdmissionRecordDto();
-                helperAdmissionRecord = _mapper.Map<GetAdmissionRecordDto>(admissionRecord);
- 
-                var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == admissionRecord.DoctorId);
-                if (doctor != null)
-                {
-                    doctorName = doctor.Name + " " + doctor.Lastname + " - " + doctor.Code;
-                    helperAdmissionRecord.DoctorName = doctorName;
-                }
-                if (patient != null)
-                {
-                    patientName = patient.Name + " " + patient.Lastname;
-                    helperAdmissionRecord.PatientName = patientName;
-                }
+                
                 var record = _mapper.Map<MedicalFindingRecord>(newMedicalFindingRecord);
                 record.CreatedAt = DateTime.UtcNow;
                 record.Patient = patient;
@@ -69,8 +57,8 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                 _context.MedicalFindingRecords.Add(record);
                 await _context.SaveChangesAsync();
                 var helperRecord = new GetMedicalFindingRecordDto();
-                helperRecord = _mapper.Map<GetMedicalFindingRecordDto>(record);
-                helperRecord.AdmissionRecord = helperAdmissionRecord;
+                helperRecord = await _helperMethods.ReturnMedicalRecord(record);
+                Console.WriteLine(record);
                 serviceResponse.Data = helperRecord;
             }
             catch (Exception ex)
@@ -100,34 +88,11 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                 var records = await _context.MedicalFindingRecords.ToListAsync();
                 List<GetMedicalFindingRecordDto> allRecords = new List<GetMedicalFindingRecordDto>();
                 GetMedicalFindingRecordDto helperRecord = new GetMedicalFindingRecordDto();
-                GetAdmissionRecordDto helperAdmissionRecord = new GetAdmissionRecordDto();
-                string patientName;
-                string doctorName;
+                
                 foreach (var record in records)
                 {
                     helperRecord = new GetMedicalFindingRecordDto();
-                    helperAdmissionRecord = new GetAdmissionRecordDto();
-                    var patient = await _context.Patients.SingleOrDefaultAsync(d => d.Id == record.PatientId);
-                    var admissionRecord = await _context.AdmissionRecords.SingleOrDefaultAsync(d => d.Id == record.AdmissionRecordId);
-                    var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == admissionRecord.DoctorId);
-                    if (doctor != null)
-                    {
-                        doctorName = doctor.Name + " " + doctor.Lastname + " - " + doctor.Code;
-                        helperAdmissionRecord.DoctorName = doctorName;
-                    }
-                    if (patient != null)
-                    {
-                        patientName = patient.Name + " " + patient.Lastname;
-                        helperAdmissionRecord.PatientName = patientName;
-                    }
-                    if (admissionRecord.Urgent == true) helperAdmissionRecord.Urgent = "Yes";
-                    else helperAdmissionRecord.Urgent = "No";
-                    helperAdmissionRecord.Id = admissionRecord.Id;
-                    helperAdmissionRecord.AdmittedAt = admissionRecord.AdmittedAt;
-                    helperRecord.Id = record.Id;
-                    helperRecord.Description = record.Description;
-                    helperRecord.CreatedAt = record.CreatedAt;
-                    helperRecord.AdmissionRecord = helperAdmissionRecord;
+                    helperRecord = await _helperMethods.ReturnMedicalRecord(record);
                     allRecords.Add(helperRecord);
                 }
                 serviceResponse.Data = allRecords;
@@ -149,34 +114,11 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                 var records = await _context.MedicalFindingRecords.ToListAsync();
                 List<GetMedicalFindingRecordDto> allRecords = new List<GetMedicalFindingRecordDto>();
                 GetMedicalFindingRecordDto helperRecord = new GetMedicalFindingRecordDto();
-                GetAdmissionRecordDto helperAdmissionRecord = new GetAdmissionRecordDto();
-                string patientName;
-                string doctorName;
+              
                 foreach (var record in records)
                 {
                     helperRecord = new GetMedicalFindingRecordDto();
-                    helperAdmissionRecord = new GetAdmissionRecordDto();
-                    var patient = await _context.Patients.SingleOrDefaultAsync(d => d.Id == record.PatientId);
-                    var admissionRecord = await _context.AdmissionRecords.SingleOrDefaultAsync(d => d.Id == record.AdmissionRecordId);
-                    var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == admissionRecord.DoctorId);
-                    if (doctor != null)
-                    {
-                        doctorName = doctor.Name + " " + doctor.Lastname + " - " + doctor.Code;
-                        helperAdmissionRecord.DoctorName = doctorName;
-                    }
-                    if (patient != null)
-                    {
-                        patientName = patient.Name + " " + patient.Lastname;
-                        helperAdmissionRecord.PatientName = patientName;
-                    }
-                    if (admissionRecord.Urgent == true) helperAdmissionRecord.Urgent = "Yes";
-                    else helperAdmissionRecord.Urgent = "No";
-                    helperAdmissionRecord.Id = admissionRecord.Id;
-                    helperAdmissionRecord.AdmittedAt = admissionRecord.AdmittedAt;
-                    helperRecord.Id = record.Id;
-                    helperRecord.Description = record.Description;
-                    helperRecord.CreatedAt = record.CreatedAt;
-                    helperRecord.AdmissionRecord = helperAdmissionRecord;
+                    helperRecord = await _helperMethods.ReturnMedicalRecord(record);
                     allRecords.Add(helperRecord);
                 }
                 serviceResponse.Data = allRecords;
@@ -200,34 +142,16 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                     .ToListAsync();
                 List<GetMedicalFindingRecordDto> allRecords = new List<GetMedicalFindingRecordDto>();
                 GetMedicalFindingRecordDto helperRecord = new GetMedicalFindingRecordDto();
-                GetAdmissionRecordDto helperAdmissionRecord = new GetAdmissionRecordDto();
-                string patientName;
-                string doctorName;
+                if(records.Count == 0)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Patient with that id doesn't exist or doesn't have any medical records!";
+                    return serviceResponse;
+                }
                 foreach (var record in records)
                 {
                     helperRecord = new GetMedicalFindingRecordDto();
-                    helperAdmissionRecord = new GetAdmissionRecordDto();
-                    var patient = await _context.Patients.SingleOrDefaultAsync(d => d.Id == record.PatientId);
-                    var admissionRecord = await _context.AdmissionRecords.SingleOrDefaultAsync(d => d.Id == record.AdmissionRecordId);
-                    var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == admissionRecord.DoctorId);
-                    if (doctor != null)
-                    {
-                        doctorName = doctor.Name + " " + doctor.Lastname + " - " + doctor.Code;
-                        helperAdmissionRecord.DoctorName = doctorName;
-                    }
-                    if (patient != null)
-                    {
-                        patientName = patient.Name + " " + patient.Lastname;
-                        helperAdmissionRecord.PatientName = patientName;
-                    }
-                    if (admissionRecord.Urgent == true) helperAdmissionRecord.Urgent = "Yes";
-                    else helperAdmissionRecord.Urgent = "No";
-                    helperAdmissionRecord.Id = admissionRecord.Id;
-                    helperAdmissionRecord.AdmittedAt = admissionRecord.AdmittedAt;
-                    helperRecord.Id = record.Id;
-                    helperRecord.Description = record.Description;
-                    helperRecord.CreatedAt = record.CreatedAt;
-                    helperRecord.AdmissionRecord = helperAdmissionRecord;
+                    helperRecord = await _helperMethods.ReturnMedicalRecord(record);
                     allRecords.Add(helperRecord);
                 }
                 
@@ -261,39 +185,13 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                     serviceResponse.Message = "Description can't be empty or only contain whitespaces!";
                     return serviceResponse;
                 }
-                var admissionRecord = await _context.AdmissionRecords.SingleOrDefaultAsync(r => r.Id == updatedRecord.AdmissionRecordId);
-                var patient = await _context.Patients.SingleOrDefaultAsync(p => p.Id == admissionRecord.PatientId);
-                
-
-                var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == admissionRecord.DoctorId);
 
                 _mapper.Map(newRecord, updatedRecord);
                 await _context.SaveChangesAsync();
 
                 GetMedicalFindingRecordDto helperMedicalRecord = new GetMedicalFindingRecordDto();
-                GetAdmissionRecordDto helperRecord = new GetAdmissionRecordDto();
-                helperRecord = _mapper.Map<GetAdmissionRecordDto>(admissionRecord);
-               
-
-                if (patient != null)
-                {
-                    string patientName = patient.Name + " " + patient.Lastname;
-                    helperRecord.PatientName = patientName;
-                }
-                
-
-                if (doctor != null)
-                {
-                    string doctorName = doctor.Name + " " + doctor.Lastname + " - " + doctor.Code;
-                    helperRecord.DoctorName = doctorName;
-                }
-               
-
-                if (admissionRecord.Urgent == true) helperRecord.Urgent = "Yes";
-                else helperRecord.Urgent = "No";
-                helperRecord.Id = admissionRecord.Id;
-                helperMedicalRecord = _mapper.Map<GetMedicalFindingRecordDto>(updatedRecord);
-                helperMedicalRecord.AdmissionRecord = helperRecord;
+                helperMedicalRecord = await _helperMethods.ReturnMedicalRecord(updatedRecord);
+       
                 serviceResponse.Data = helperMedicalRecord;
             }
             catch (Exception ex)
