@@ -34,10 +34,32 @@ namespace HealthClinicApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingle(int id)
+        [HttpGet("{PatientId}")]
+        public async Task<IActionResult> GetSingle(int PatientId)
         {
-            var response = await _medicalFindingRecordService.GetMedicalFindingRecordByPatient(id);
+            var response = await _medicalFindingRecordService.GetMedicalFindingRecordByPatient(PatientId);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromQuery] int id, UpdateMedicalFindingRecordDto newRecord)
+        {
+            var response = await _medicalFindingRecordService.UpdateMedicalFindingRecord(id, newRecord);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var response = await _medicalFindingRecordService.DeleteMedicalFindingRecord(id);
             if (response.Data == null)
             {
                 return NotFound(response);

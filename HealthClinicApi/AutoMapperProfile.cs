@@ -30,8 +30,7 @@ namespace HealthClinicApi
 
             CreateMap<MedicalFindingRecord, GetMedicalFindingRecordDto>();
             CreateMap<AddMedicalFindingRecordDto, MedicalFindingRecord>().ForMember(x => x.CreatedAt, t => t.Ignore()); ;
-            CreateMap<UpdateMedicalFindingRecordDto, MedicalFindingRecord>()
-           .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<UpdateMedicalFindingRecordDto, MedicalFindingRecord>();
         }
     }
 }
