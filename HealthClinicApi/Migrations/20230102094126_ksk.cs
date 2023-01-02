@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HealthClinicApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class ksk : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,7 +40,7 @@ namespace HealthClinicApi.Migrations
                     Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Number = table.Column<int>(type: "int", nullable: true),
+                    Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DoctorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -62,7 +62,7 @@ namespace HealthClinicApi.Migrations
                     AdmittedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PatientId = table.Column<int>(type: "int", nullable: true),
                     DoctorId = table.Column<int>(type: "int", nullable: true),
-                    Urgent = table.Column<bool>(type: "bit", nullable: true)
+                    Urgent = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,12 +87,18 @@ namespace HealthClinicApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PatientTd = table.Column<int>(type: "int", nullable: false),
-                    PatientId = table.Column<int>(type: "int", nullable: false)
+                    PatientId = table.Column<int>(type: "int", nullable: false),
+                    AdmissionRecordId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MedicalFindingRecords", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MedicalFindingRecords_AdmissionRecords_AdmissionRecordId",
+                        column: x => x.AdmissionRecordId,
+                        principalTable: "AdmissionRecords",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MedicalFindingRecords_Patients_PatientId",
                         column: x => x.PatientId,
@@ -112,6 +118,17 @@ namespace HealthClinicApi.Migrations
                     { 4, 8976, "Puhalo", "Simonida", 3 }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Patients",
+                columns: new[] { "Id", "Adress", "Birthdate", "DoctorId", "Gender", "Lastname", "Name", "Number" },
+                values: new object[,]
+                {
+                    { 1, "Zahira Panjete 32", new DateTime(1980, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, "Mosby", "Ted", "+38761395783" },
+                    { 2, "Neverland 812", new DateTime(1989, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, "Stinson", "Barney", "0603372400" },
+                    { 3, "New Jersey 22", new DateTime(1999, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 2, "Vision", "Wanda", "062575685" },
+                    { 4, "Ferde Hauptman 32", new DateTime(1970, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 2, "Green", "Rachel", "+4930901820" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AdmissionRecords_DoctorId",
                 table: "AdmissionRecords",
@@ -121,6 +138,11 @@ namespace HealthClinicApi.Migrations
                 name: "IX_AdmissionRecords_PatientId",
                 table: "AdmissionRecords",
                 column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MedicalFindingRecords_AdmissionRecordId",
+                table: "MedicalFindingRecords",
+                column: "AdmissionRecordId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicalFindingRecords_PatientId",
@@ -137,10 +159,10 @@ namespace HealthClinicApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AdmissionRecords");
+                name: "MedicalFindingRecords");
 
             migrationBuilder.DropTable(
-                name: "MedicalFindingRecords");
+                name: "AdmissionRecords");
 
             migrationBuilder.DropTable(
                 name: "Patients");

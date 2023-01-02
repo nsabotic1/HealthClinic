@@ -120,6 +120,9 @@ namespace HealthClinicApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AdmissionRecordId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -130,10 +133,9 @@ namespace HealthClinicApi.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PatientTd")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AdmissionRecordId");
 
                     b.HasIndex("PatientId");
 
@@ -237,11 +239,19 @@ namespace HealthClinicApi.Migrations
 
             modelBuilder.Entity("HealthClinicApi.Models.MedicalFindingRecord", b =>
                 {
+                    b.HasOne("HealthClinicApi.Models.AdmissionRecord", "AdmissionRecord")
+                        .WithMany("MedicalFindingRecords")
+                        .HasForeignKey("AdmissionRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("HealthClinicApi.Models.Patient", "Patient")
                         .WithMany("MedicalFindingRecords")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AdmissionRecord");
 
                     b.Navigation("Patient");
                 });
@@ -251,6 +261,11 @@ namespace HealthClinicApi.Migrations
                     b.HasOne("HealthClinicApi.Models.Doctor", null)
                         .WithMany("Patients")
                         .HasForeignKey("DoctorId");
+                });
+
+            modelBuilder.Entity("HealthClinicApi.Models.AdmissionRecord", b =>
+                {
+                    b.Navigation("MedicalFindingRecords");
                 });
 
             modelBuilder.Entity("HealthClinicApi.Models.Doctor", b =>

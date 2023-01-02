@@ -1,4 +1,5 @@
-﻿using HealthClinicApi.Dtos.PatientDtos;
+﻿using HealthClinicApi.Dtos.AdmissionRecordDtos;
+using HealthClinicApi.Dtos.PatientDtos;
 using HealthClinicApi.Models;
 
 namespace HealthClinicApi.Dtos.MedicalFindingRecordDto
@@ -8,6 +9,6 @@ namespace HealthClinicApi.Dtos.MedicalFindingRecordDto
         public int Id { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
-        public GetPatientDto Patient { get; set; }
+        public GetAdmissionRecordDto AdmissionRecord { get; set; }
     }
 }

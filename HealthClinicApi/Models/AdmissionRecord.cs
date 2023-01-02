@@ -1,4 +1,6 @@
-﻿namespace HealthClinicApi.Models
+﻿using HealthClinicApi.Dtos.AdmissionRecordDtos;
+
+namespace HealthClinicApi.Models
 {
     public class AdmissionRecord //prijem pacijenata
     {
@@ -9,6 +11,6 @@
         public Patient Patient { get; set; }
         public Doctor Doctor { get; set; }
         public bool Urgent{ get; set; }
-    
+        public ICollection<MedicalFindingRecord> MedicalFindingRecords { get; set; }
     }
 }

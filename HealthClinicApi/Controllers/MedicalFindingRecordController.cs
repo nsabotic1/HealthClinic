@@ -33,5 +33,17 @@ namespace HealthClinicApi.Controllers
             }
             return Ok(response);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSingle(int id)
+        {
+            var response = await _medicalFindingRecordService.GetMedicalFindingRecordByPatient(id);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
     }
 }

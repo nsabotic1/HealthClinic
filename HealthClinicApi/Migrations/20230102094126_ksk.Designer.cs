@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthClinicApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221229134536_pomocnamig")]
-    partial class pomocnamig
+    [Migration("20230102094126_ksk")]
+    partial class ksk
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,7 +42,7 @@ namespace HealthClinicApi.Migrations
                     b.Property<int?>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("Urgent")
+                    b.Property<bool>("Urgent")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -123,6 +123,9 @@ namespace HealthClinicApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AdmissionRecordId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -133,10 +136,9 @@ namespace HealthClinicApi.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PatientTd")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AdmissionRecordId");
 
                     b.HasIndex("PatientId");
 
@@ -171,8 +173,8 @@ namespace HealthClinicApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Number")
-                        .HasColumnType("int");
+                    b.Property<string>("Number")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -189,7 +191,7 @@ namespace HealthClinicApi.Migrations
                             Gender = 1,
                             Lastname = "Mosby",
                             Name = "Ted",
-                            Number = 123
+                            Number = "+38761395783"
                         },
                         new
                         {
@@ -199,7 +201,7 @@ namespace HealthClinicApi.Migrations
                             Gender = 1,
                             Lastname = "Stinson",
                             Name = "Barney",
-                            Number = 321
+                            Number = "0603372400"
                         },
                         new
                         {
@@ -209,7 +211,7 @@ namespace HealthClinicApi.Migrations
                             Gender = 2,
                             Lastname = "Vision",
                             Name = "Wanda",
-                            Number = 541
+                            Number = "062575685"
                         },
                         new
                         {
@@ -219,7 +221,7 @@ namespace HealthClinicApi.Migrations
                             Gender = 2,
                             Lastname = "Green",
                             Name = "Rachel",
-                            Number = 541
+                            Number = "+4930901820"
                         });
                 });
 
@@ -240,11 +242,19 @@ namespace HealthClinicApi.Migrations
 
             modelBuilder.Entity("HealthClinicApi.Models.MedicalFindingRecord", b =>
                 {
+                    b.HasOne("HealthClinicApi.Models.AdmissionRecord", "AdmissionRecord")
+                        .WithMany("MedicalFindingRecords")
+                        .HasForeignKey("AdmissionRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("HealthClinicApi.Models.Patient", "Patient")
                         .WithMany("MedicalFindingRecords")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AdmissionRecord");
 
                     b.Navigation("Patient");
                 });
@@ -254,6 +264,11 @@ namespace HealthClinicApi.Migrations
                     b.HasOne("HealthClinicApi.Models.Doctor", null)
                         .WithMany("Patients")
                         .HasForeignKey("DoctorId");
+                });
+
+            modelBuilder.Entity("HealthClinicApi.Models.AdmissionRecord", b =>
+                {
+                    b.Navigation("MedicalFindingRecords");
                 });
 
             modelBuilder.Entity("HealthClinicApi.Models.Doctor", b =>
