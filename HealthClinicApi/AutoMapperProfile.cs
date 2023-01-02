@@ -26,6 +26,7 @@ namespace HealthClinicApi
 
             CreateMap<AdmissionRecord, GetAdmissionRecordDto>();
             CreateMap<AddAdmissionRecordDto, AdmissionRecord>();
+            
 
             CreateMap<MedicalFindingRecord, GetMedicalFindingRecordDto>();
             CreateMap<AddMedicalFindingRecordDto, MedicalFindingRecord>().ForMember(x => x.CreatedAt, t => t.Ignore()); ;

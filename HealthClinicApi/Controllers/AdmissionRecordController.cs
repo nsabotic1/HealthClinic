@@ -37,5 +37,28 @@ namespace HealthClinicApi.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromQuery] int id, UpdateAdmissionRecordDto newRecord)
+        {
+            var response = await _admissionRecordService.UpdateAdmissionRecord(id, newRecord);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult>Delete(int id)
+        {
+            var response = await _admissionRecordService.DeleteAdmissionRecord(id);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+        
     }
 }

@@ -70,6 +70,62 @@ namespace HealthClinicApi.Services.AdmissionRecordService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<GetAdmissionRecordDto>>> DeleteAdmissionRecord(int id)
+        {
+            var serviceResponse = new ServiceResponse<List<GetAdmissionRecordDto>>();
+            try
+            {
+                var deletedRecord = await _context.AdmissionRecords.SingleOrDefaultAsync(r => r.Id == id);
+                if(deletedRecord == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Admission record with that id doesn't exsist!";
+                    return serviceResponse;
+                }
+                _context.AdmissionRecords.Remove(deletedRecord);
+                await _context.SaveChangesAsync();
+
+                var records = await _context.AdmissionRecords.ToListAsync();
+                string patientName;
+                string doctorName;
+                List<GetAdmissionRecordDto> allRecords = new List<GetAdmissionRecordDto>();
+                GetAdmissionRecordDto helperRecord = new GetAdmissionRecordDto();
+
+                foreach (var record in records)
+                {
+                    helperRecord = new GetAdmissionRecordDto();
+                    var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == record.DoctorId);
+
+                    if (doctor != null)
+                    {
+                        doctorName = doctor.Name + " " + doctor.Lastname + " - " + record.Doctor.Code;
+                        helperRecord.DoctorName = doctorName;
+                    }
+
+                    var patient = await _context.Patients.SingleOrDefaultAsync(p => p.Id == record.PatientId);
+                    if (patient != null)
+                    {
+                        patientName = patient.Name + " " + patient.Lastname;
+                        helperRecord.PatientName = patientName;
+                    }
+
+                    helperRecord.Id = record.Id;
+                    helperRecord.AdmittedAt = record.AdmittedAt;
+                    if (record.Urgent == true) helperRecord.Urgent = "Yes";
+                    else helperRecord.Urgent = "No";
+                    allRecords.Add(helperRecord);
+                }
+                serviceResponse.Data = allRecords;
+                serviceResponse.Message = "Record successfully deleted!";
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+
         public async Task<ServiceResponse<List<GetAdmissionRecordDto>>> GetAllAdmissionRecords(DateTime? date1, DateTime? date2)
         {
             var serviceResponse = new ServiceResponse<List<GetAdmissionRecordDto>>();
@@ -124,6 +180,81 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                 serviceResponse.Message = ex.Message;
             }
 
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetAdmissionRecordDto>> UpdateAdmissionRecord(int id, UpdateAdmissionRecordDto newRecord)
+        {
+            var serviceResponse = new ServiceResponse<GetAdmissionRecordDto>();
+            try
+            {
+                if (newRecord.AdmittedAt.HasValue)
+                {
+                    if (DateTime.Compare((DateTime)newRecord.AdmittedAt, DateTime.Today.Date) < 0)
+                    {
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = "Admitted date can't be older than today!";
+                        return serviceResponse;
+                    }
+                }
+
+                var updatedRecord = await _context.AdmissionRecords.SingleOrDefaultAsync(r => r.Id == id);
+
+                if(updatedRecord == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Admission record with that id doesn't exsist!";
+                    return serviceResponse;
+                }
+
+                var patient = await _context.Patients.SingleOrDefaultAsync(p => p.Id == newRecord.PatientId);
+                var oldPatient = await _context.Patients.SingleOrDefaultAsync(p => p.Id == updatedRecord.Id);
+
+                var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == newRecord.DoctorId);
+                var oldDoctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == updatedRecord.DoctorId);
+
+                if (newRecord.DoctorId != null) updatedRecord.DoctorId = newRecord.DoctorId;
+                if (newRecord.PatientId != null) updatedRecord.PatientId = newRecord.PatientId;
+                if (newRecord.Urgent != null) updatedRecord.Urgent = (bool)newRecord.Urgent;
+                if (newRecord.AdmittedAt.HasValue) updatedRecord.AdmittedAt = (DateTime)newRecord.AdmittedAt;
+
+                GetAdmissionRecordDto helperRecord = new GetAdmissionRecordDto();
+
+                if(newRecord.AdmittedAt.HasValue) helperRecord.AdmittedAt = (DateTime)newRecord.AdmittedAt;
+                else helperRecord.AdmittedAt = updatedRecord.AdmittedAt;
+
+                if (patient != null)
+                {
+                    string patientName = patient.Name + " " + patient.Lastname;
+                    helperRecord.PatientName = patientName;
+                }
+                else if(oldPatient != null)
+                {
+                    helperRecord.PatientName = oldPatient.Name + " " + oldPatient.Lastname;
+                }
+
+                if (doctor != null)
+                {
+                    string doctorName = doctor.Name + " " + doctor.Lastname + " - " + doctor.Code;
+                    helperRecord.DoctorName = doctorName;
+                }
+                else if(oldDoctor != null)
+                {
+                    helperRecord.DoctorName = oldDoctor.Name + " " + oldDoctor.Lastname + " - " + oldDoctor.Code;
+                }
+
+                if (updatedRecord.Urgent == true) helperRecord.Urgent = "Yes";
+                else helperRecord.Urgent = "No";
+                helperRecord.Id = updatedRecord.Id;
+
+                await _context.SaveChangesAsync();
+                serviceResponse.Data = helperRecord;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
     }
