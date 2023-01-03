@@ -39,6 +39,13 @@ namespace HealthClinicApi.Services
                     serviceResponse.Message = "Name and Lastname can't be empty or contain only whitespaces!";
                     return serviceResponse;
                 }
+                DateTime compareDate = DateTime.Parse("01/01/0001");
+                if(newPatient.Birthdate.CompareTo(compareDate) == 0)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Birthdate is required!";
+                    return serviceResponse;
+                }
                 var patient = _mapper.Map<Patient>(newPatient);
                 if(patient.Gender == 0)
                 {
