@@ -176,7 +176,7 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                 }
 
                 var patient = await _context.Patients.SingleOrDefaultAsync(p => p.Id == newRecord.PatientId);
-                var oldPatient = await _context.Patients.SingleOrDefaultAsync(p => p.Id == updatedRecord.Id);
+                var oldPatient = await _context.Patients.SingleOrDefaultAsync(p => p.Id == updatedRecord.PatientId);
 
                 var doctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == newRecord.DoctorId);
                 var oldDoctor = await _context.Doctors.SingleOrDefaultAsync(d => d.Id == updatedRecord.DoctorId);
@@ -201,7 +201,7 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                     helperRecord.PatientName = oldPatient.Name + " " + oldPatient.Lastname;
                 }
 
-                if (doctor != null)
+                if (doctor != null && doctor.Title == Title.Specialist)
                 {
                     string doctorName = doctor.Name + " " + doctor.Lastname + " - " + doctor.Code;
                     helperRecord.DoctorName = doctorName;
@@ -210,7 +210,12 @@ namespace HealthClinicApi.Services.AdmissionRecordService
                 {
                     helperRecord.DoctorName = oldDoctor.Name + " " + oldDoctor.Lastname + " - " + oldDoctor.Code;
                 }
-
+                else if(doctor!=null && doctor.Title != Title.Specialist)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "The doctor must be a specialist!";
+                    return serviceResponse;
+                }
                 if (updatedRecord.Urgent == true) helperRecord.Urgent = "Yes";
                 else helperRecord.Urgent = "No";
                 helperRecord.Id = updatedRecord.Id;

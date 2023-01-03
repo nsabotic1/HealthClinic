@@ -35,6 +35,12 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                     return serviceResponse;
                 }
 
+                if (string.IsNullOrWhiteSpace(newMedicalFindingRecord.Description))
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Description can't be empty or only contain whitespaces!";
+                    return serviceResponse;
+                }
                 var admissionRecord = await _context.AdmissionRecords.SingleOrDefaultAsync(r => r.Id == newMedicalFindingRecord.AdmissionRecordId);
                 if (admissionRecord == null)
                 {
@@ -194,11 +200,12 @@ namespace HealthClinicApi.Services.MedicalFindingRecordService
                 }
 
                 _mapper.Map(newRecord, updatedRecord);
+                updatedRecord.CreatedAt = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
 
                 GetMedicalFindingRecordDto helperMedicalRecord = new GetMedicalFindingRecordDto();
                 helperMedicalRecord = await _helperMethods.ReturnMedicalRecord(updatedRecord);
-       
+                helperMedicalRecord.CreatedAt = DateTime.UtcNow;
                 serviceResponse.Data = helperMedicalRecord;
             }
             catch (Exception ex)

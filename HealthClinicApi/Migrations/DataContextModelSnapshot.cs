@@ -196,7 +196,7 @@ namespace HealthClinicApi.Migrations
                         {
                             Id = 1,
                             AdmissionRecordId = 1,
-                            CreatedAt = new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7862),
+                            CreatedAt = new DateTime(2023, 1, 3, 13, 24, 54, 513, DateTimeKind.Utc).AddTicks(9125),
                             Description = "The patient complains of kidney pain. Sand present in right kidney. Do a urine test",
                             PatientId = 1
                         },
@@ -204,7 +204,7 @@ namespace HealthClinicApi.Migrations
                         {
                             Id = 2,
                             AdmissionRecordId = 2,
-                            CreatedAt = new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7864),
+                            CreatedAt = new DateTime(2023, 1, 3, 13, 24, 54, 513, DateTimeKind.Utc).AddTicks(9129),
                             Description = "Asthma present for months. Need to change therapy.",
                             PatientId = 2
                         },
@@ -212,7 +212,7 @@ namespace HealthClinicApi.Migrations
                         {
                             Id = 3,
                             AdmissionRecordId = 3,
-                            CreatedAt = new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7866),
+                            CreatedAt = new DateTime(2023, 1, 3, 13, 24, 54, 513, DateTimeKind.Utc).AddTicks(9132),
                             Description = "The patient complains of back pain. it is necessary to take a spine scan",
                             PatientId = 3
                         },
@@ -220,7 +220,7 @@ namespace HealthClinicApi.Migrations
                         {
                             Id = 4,
                             AdmissionRecordId = 4,
-                            CreatedAt = new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7867),
+                            CreatedAt = new DateTime(2023, 1, 3, 13, 24, 54, 513, DateTimeKind.Utc).AddTicks(9134),
                             Description = "Sore throat for 10 days. Drink as much tea as possible and Tylol hot.",
                             PatientId = 4
                         });

@@ -30,7 +30,13 @@ namespace HealthClinicApi.Services.DoctorService
                     serviceResponse.Message = "Title and code can't be 0!";
                     return serviceResponse;
                 }
-
+                
+                if(string.IsNullOrWhiteSpace(doctor.Name) || string.IsNullOrWhiteSpace(doctor.Lastname))
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Name and Lastname can't be empty";
+                    return serviceResponse;
+                }
                 _context.Doctors.Add(doctor);
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetDoctorDto>(doctor);

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HealthClinicApi.Migrations
 {
     /// <inheritdoc />
-    public partial class seededData : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -142,10 +142,10 @@ namespace HealthClinicApi.Migrations
                 columns: new[] { "Id", "AdmissionRecordId", "CreatedAt", "Description", "PatientId" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7862), "The patient complains of kidney pain. Sand present in right kidney. Do a urine test", 1 },
-                    { 2, 2, new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7864), "Asthma present for months. Need to change therapy.", 2 },
-                    { 3, 3, new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7866), "The patient complains of back pain. it is necessary to take a spine scan", 3 },
-                    { 4, 4, new DateTime(2023, 1, 2, 15, 48, 3, 971, DateTimeKind.Utc).AddTicks(7867), "Sore throat for 10 days. Drink as much tea as possible and Tylol hot.", 4 }
+                    { 1, 1, new DateTime(2023, 1, 3, 13, 24, 54, 513, DateTimeKind.Utc).AddTicks(9125), "The patient complains of kidney pain. Sand present in right kidney. Do a urine test", 1 },
+                    { 2, 2, new DateTime(2023, 1, 3, 13, 24, 54, 513, DateTimeKind.Utc).AddTicks(9129), "Asthma present for months. Need to change therapy.", 2 },
+                    { 3, 3, new DateTime(2023, 1, 3, 13, 24, 54, 513, DateTimeKind.Utc).AddTicks(9132), "The patient complains of back pain. it is necessary to take a spine scan", 3 },
+                    { 4, 4, new DateTime(2023, 1, 3, 13, 24, 54, 513, DateTimeKind.Utc).AddTicks(9134), "Sore throat for 10 days. Drink as much tea as possible and Tylol hot.", 4 }
                 });
 
             migrationBuilder.CreateIndex(

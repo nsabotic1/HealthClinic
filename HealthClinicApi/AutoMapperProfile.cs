@@ -17,6 +17,7 @@ namespace HealthClinicApi
             CreateMap<UpdatePatientDto, Patient>()
            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Gender?, Gender>().ConvertUsing((src, dest) => src ?? dest);
+            CreateMap<DateTime?, DateTime>().ConvertUsing((src, dest) => src ?? dest);
 
             CreateMap<Doctor, GetDoctorDto>();
             CreateMap<AddDoctorDto, Doctor>();

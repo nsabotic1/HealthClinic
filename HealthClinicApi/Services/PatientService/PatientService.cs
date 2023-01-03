@@ -33,7 +33,12 @@ namespace HealthClinicApi.Services
                         return serviceResponse;
                     }
                 }
-
+                if(string.IsNullOrWhiteSpace(newPatient.Name) || string.IsNullOrWhiteSpace(newPatient.Lastname))
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Name and Lastname can't be empty or contain only whitespaces!";
+                    return serviceResponse;
+                }
                 var patient = _mapper.Map<Patient>(newPatient);
                 if(patient.Gender == 0)
                 {
@@ -117,7 +122,7 @@ namespace HealthClinicApi.Services
                         return serviceResponse;
                     }
                 }
-
+               
                 _mapper.Map(newPatient, patient);
                 await _context.SaveChangesAsync();
 
